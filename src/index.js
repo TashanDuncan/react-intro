@@ -10,6 +10,16 @@ function Square(props) {
   );
 }
 
+function Move(props) {
+  return(
+    <li  >
+    <button 
+    className={props.move === props.history ? `currentStep` : null}
+     onClick={() => props.onClick()}>{props.desc}</button>
+  </li>
+  )
+}
+
 class Board extends React.Component {
   renderSquare(i) {
     return (
@@ -90,16 +100,24 @@ class Game extends React.Component {
     const winner = calculateWinner(current.squares);
     const moves = history.map((step, move) => {
       const latestMoveSquare = step.latestMoveSquare;
-      console.log(latestMoveSquare);
+      console.log(move);
+      console.log(history);
       const col = 1 + (latestMoveSquare % 3);
       const row = 1 + Math.floor(latestMoveSquare / 3);
       const desc = move
         ? `Go to move #${move} (${col}, ${row})`
         : 'Go to game start';
       return (
-        <li key={move}>
+        <Move 
+        key={move}
+        history={this.state.stepNumber}
+        move={move}
+        onClick={() => this.jumpTo(move)}
+        desc={desc}
+        />
+        /* <li key={move} className={move === history.length - 1 ? `currentStep` : null}>
           <button onClick={() => this.jumpTo(move)}>{desc}</button>
-        </li>
+        </li> */
       );
     });
     let status;
